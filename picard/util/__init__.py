@@ -39,9 +39,9 @@ class LockableObject(QtCore.QObject):
 
     """Read/write lockable object."""
 
-    def __init__(self):
+    def __init__(self, recursion_mode=QtCore.QReadWriteLock.NonRecursive):
         QtCore.QObject.__init__(self)
-        self.__lock = QtCore.QReadWriteLock()
+        self.__lock = QtCore.QReadWriteLock(recursion_mode)
 
     def lock_for_read(self):
         """Lock the object for read operations."""
@@ -54,6 +54,34 @@ class LockableObject(QtCore.QObject):
     def unlock(self):
         """Unlock the object."""
         self.__lock.unlock()
+
+
+class AtomicCounter(LockableObject):
+    """A recursively lockable object for counting."""
+    def __init__(self):
+        super(AtomicCounter, self).__init__(QtCore.QReadWriteLock.Recursive)
+        self.__num = 0
+
+    def __modify(self, change):
+        """Add `change` to the value held by this object."""
+        self.lock_for_write()
+        self.__num = self.__num + change
+        self.unlock()
+
+    def inc(self):
+        """Increment the value held by this object by 1. Does not return the
+        value."""
+        self.__modify(1)
+
+    def dec(self):
+        """Decrement the value held by this object by 1. Does not return the
+        value."""
+        self.__modify(-1)
+
+    @property
+    def value(self):
+        """The value held by this object."""
+        return self.__num
 
 
 _io_encoding = sys.getfilesystemencoding()
