@@ -80,6 +80,7 @@ from picard.util import (
     uniqify,
     is_hidden,
     versions,
+    AtomicCounter
 )
 from picard.webservice import XmlWebService
 from picard.ui.searchdialog import (
@@ -214,6 +215,7 @@ class Tagger(QtWidgets.QApplication):
         self.window = MainWindow()
         self.exit_cleanup = []
         self.stopping = False
+        self.active_file_loads = AtomicCounter()
 
     def register_cleanup(self, func):
         self.exit_cleanup.append(func)
@@ -332,6 +334,16 @@ class Tagger(QtWidgets.QApplication):
                     self.analyze([file])
             elif config.setting['analyze_new_files'] and file.can_analyze():
                 self.analyze([file])
+        if config.setting["cluster_new_files"]:
+            # We lock active_file_loads explicitly because the user could start
+            # a new file loading process between .dec() and .value == 0
+            self.active_file_loads.lock_for_write()
+            try:
+                self.active_file_loads.dec()
+                if self.active_file_loads.value == 0:
+                    self.cluster(self.unmatched_files.files)
+            finally:
+                self.active_file_loads.unlock()
 
     def move_files(self, files, target):
         if target is None:
@@ -376,6 +388,8 @@ class Tagger(QtWidgets.QApplication):
                 self.unmatched_files.add_files(new_files)
                 target = None
             for file in new_files:
+                if config.setting["cluster_new_files"]:
+                    self.active_file_loads.inc()
                 file.load(partial(self._file_loaded, target=target))
 
     def add_directory(self, path):

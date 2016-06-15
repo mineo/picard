@@ -8,7 +8,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_GeneralOptionsPage(object):
     def setupUi(self, GeneralOptionsPage):
         GeneralOptionsPage.setObjectName("GeneralOptionsPage")
-        GeneralOptionsPage.resize(283, 435)
+        GeneralOptionsPage.resize(290, 435)
         self.vboxlayout = QtWidgets.QVBoxLayout(GeneralOptionsPage)
         self.vboxlayout.setObjectName("vboxlayout")
         self.groupBox = QtWidgets.QGroupBox(GeneralOptionsPage)
@@ -63,6 +63,9 @@ class Ui_GeneralOptionsPage(object):
         self.analyze_new_files = QtWidgets.QCheckBox(self.groupBox_2)
         self.analyze_new_files.setObjectName("analyze_new_files")
         self.verticalLayout.addWidget(self.analyze_new_files)
+        self.autocluster = QtWidgets.QCheckBox(self.groupBox_2)
+        self.autocluster.setObjectName("autocluster")
+        self.verticalLayout.addWidget(self.autocluster)
         self.ignore_file_mbids = QtWidgets.QCheckBox(self.groupBox_2)
         self.ignore_file_mbids.setObjectName("ignore_file_mbids")
         self.verticalLayout.addWidget(self.ignore_file_mbids)
@@ -84,5 +87,6 @@ class Ui_GeneralOptionsPage(object):
         self.logout.setText(_("Log out"))
         self.groupBox_2.setTitle(_("General"))
         self.analyze_new_files.setText(_("Automatically scan all new files"))
+        self.autocluster.setText(_("Automatically cluster new files"))
         self.ignore_file_mbids.setText(_("Ignore MBIDs when loading new files"))
 
