@@ -287,16 +287,28 @@ class Metadata(dict):
     def items(self):
         """Returns the metadata items.
 
-        >>> m.items()
-        [("key1", "value1"), ("key1", "value2"), ("key2", "value3")]
+        >>> m = Metadata()
+        >>> m.add_unique("key1", "value1")
+        >>> m.add_unique("key1", "value2")
+        >>> m.add_unique("key2", "value3")
+        >>> d = m.items()
+        >>> d.sort()
+        >>> d
+        [('key1', 'value1'), ('key1', 'value2'), ('key2', 'value3')]
         """
         return list(self.iteritems())
 
     def rawitems(self):
         """Returns the metadata items.
 
-        >>> m.rawitems()
-        [("key1", ["value1", "value2"]), ("key2", ["value3"])]
+        >>> m = Metadata()
+        >>> m.add_unique("key1", "value1")
+        >>> m.add_unique("key1", "value2")
+        >>> m.add_unique("key2", "value3")
+        >>> d = m.rawitems()
+        >>> d.sort()
+        >>> d
+        [('key1', ['value1', 'value2']), ('key2', ['value3'])]
         """
         return dict.items(self)
 
@@ -311,10 +323,10 @@ class Metadata(dict):
         >>> m = Metadata()
         >>> m["foo"] = "  bar  "
         >>> m["foo"]
-        "  bar  "
+        u'  bar  '
         >>> m.strip_whitespace()
         >>> m["foo"]
-        "bar"
+        u'bar'
         """
         self.apply_func(lambda s: s.strip())
 
