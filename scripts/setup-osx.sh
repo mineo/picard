@@ -3,7 +3,7 @@ brew tap-pin cartr/qt4
 brew install gettext
 brew link gettext --force
 brew install qt
-brew install pyqt
+brew install cartr/pyqt4
 brew install libdiscid 
 pip install mutagen
 pip install discid
