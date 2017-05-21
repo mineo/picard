@@ -78,6 +78,6 @@ class Ui_FingerprintingOptionsPage(object):
         self.label.setText(_("Fingerprint calculator:"))
         self.acoustid_fpcalc_browse.setText(_("Browse..."))
         self.acoustid_fpcalc_download.setText(_("Download..."))
-        self.label_2.setText(_("API key:"))
+        self.label_2.setText(_("API key test change:"))
         self.acoustid_apikey_get.setText(_("Get API key..."))
 
