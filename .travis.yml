@@ -38,6 +38,7 @@ install:
   - python setup.py build_ui
   - python setup.py build_ext -i
   - python setup.py regen_pot_file
+  - git diff --stat --exit-code
   - 'if [ ! -z "${TX_PASSWORD}" ]; then python setup.py get_po_files; fi'
   - 'if [ ! -z "${TX_PASSWORD}" ]; then python setup.py update_constants; fi'
   - python setup.py build_locales -i
@@ -48,5 +49,3 @@ script: "nose2 -v --with-coverage --coverage picard --coverage-report xml"
 after_success:
   - 'if [ ! -z "${CODACY_PROJECT_TOKEN}" ]; then $CODACY; python-codacy-coverage -r coverage.xml; fi'
 # Tell people that tests were run
-notifications:
-  irc: "chat.freenode.net#metabrainz"
