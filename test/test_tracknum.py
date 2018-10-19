@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-
-import unittest
-
 from picard.util import tracknum_from_filename
+from test.picardtestcase import PicardTestCase
 
 
 def parse(filename):
     return tracknum_from_filename(filename)
 
 
-class TracknumTest(unittest.TestCase):
+class TracknumTest(PicardTestCase):
 
     def test_matched_tracknum_01(self):
         self.assertEqual(parse('1.mp3'), 1)

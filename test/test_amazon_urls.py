@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-
 from picard.util import parse_amazon_url
+from test.picardtestcase import PicardTestCase
 
 
-class ParseAmazonUrlTest(unittest.TestCase):
+class ParseAmazonUrlTest(PicardTestCase):
 
     def test_1(self):
         url = 'http://www.amazon.com/dp/020530902X'
