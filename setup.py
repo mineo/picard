@@ -36,42 +36,6 @@ ext_modules = [
 tx_executable = find_executable('tx')
 
 
-class picard_test(Command):
-    description = "run automated tests"
-    user_options = [
-        ("tests=", None, "list of tests to run (default all)"),
-        ("verbosity=", "v", "verbosity"),
-    ]
-
-    def initialize_options(self):
-        self.tests = []
-        self.verbosity = 1
-
-    def finalize_options(self):
-        if self.tests:
-            self.tests = self.tests.split(",")
-        # In case the verbosity flag is used, verbosity is None
-        if not self.verbosity:
-            self.verbosity = 2
-        # Convert to appropriate verbosity if passed by --verbosity option
-        self.verbosity = int(self.verbosity)
-
-    def run(self):
-        import unittest
-
-        names = []
-        for filename in glob.glob("test/test_*.py"):
-            name = os.path.splitext(os.path.basename(filename))[0]
-            if not self.tests or name in self.tests:
-                names.append("test." + name)
-
-        tests = unittest.defaultTestLoader.loadTestsFromNames(names)
-        t = unittest.TextTestRunner(verbosity=self.verbosity)
-        testresult = t.run(tests)
-        if not testresult.wasSuccessful():
-            sys.exit("At least one test failed.")
-
-
 class picard_build_locales(Command):
     description = 'build locale files'
     user_options = [
@@ -610,7 +574,6 @@ args = {
     'ext_modules': ext_modules,
     'data_files': [],
     'cmdclass': {
-        'test': picard_test,
         'build': picard_build,
         'build_locales': picard_build_locales,
         'build_ui': picard_build_ui,
@@ -624,6 +587,8 @@ args = {
     },
     'scripts': ['scripts/' + PACKAGE_NAME],
     'install_requires': ['PyQt5', 'mutagen'],
+    'setup_requires': ['pytest-runner'],
+    'tests_require': ['pytest', 'pytest-randomly'],
     'classifiers': [
         'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
         'Development Status :: 5 - Production/Stable',

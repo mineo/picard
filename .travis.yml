@@ -13,8 +13,8 @@ env:
   global:
   - PIP_INSTALL="pip3 install"
   - INSTALL_DEPS="$PIP_INSTALL -r requirements.txt"
-  - NOSE="$PIP_INSTALL nose2"
-  - COVERAGE="$PIP_INSTALL nose-cov"
+  - NOSE="$PIP_INSTALL pytest"
+  - COVERAGE="$PIP_INSTALL pytest-cov"
   - CODACY="$PIP_INSTALL codacy-coverage"
   - LIBDISCID="libdiscid0 libdiscid0-dev"
   matrix:
@@ -53,7 +53,7 @@ before_install:
 - "$INSTALL_DEPS"
 - "$NOSE"
 - if [ ! -z "${CODACY_PROJECT_TOKEN}" ]; then $COVERAGE; fi
-script: nose2 -v --with-coverage --coverage picard --coverage-report xml
+script: py.test -v --cov=picard --cov-report xml:coverage.xml
 after_success:
 - if [ ! -z "${CODACY_PROJECT_TOKEN}" ]; then $CODACY; python-codacy-coverage -r coverage.xml;
   fi
